@@ -1,6 +1,8 @@
 # robux-faker
 Tool that manipulates robux via http level and allows to do tasks that require robux
 
+https://discord.gg/SwCsTNRxUC
+
 - Buy items without spending robux
 - Works on marketplace items, gamepasses, and developer products
 - Supports resale marketplace purchases
