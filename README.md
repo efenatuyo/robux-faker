@@ -1,6 +1,8 @@
 # robux-faker
 Tool that manipulates robux via http level and allows to do tasks that require robux
 
+# EVERYTHING IS CLIENT SIDED
+
 https://discord.gg/SwCsTNRxUC
 
 - Buy items without spending robux
