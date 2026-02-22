@@ -30,6 +30,21 @@ class PurchaseHandler(BaseHandler):
             if uuid not in self.state.cache.item_info.data:
                 return False
             
+            response_text = flow.response.get_text()
+            response_json = self.parse_json(response_text) if response_text else None
+            
+            if response_json:
+                error_message = response_json.get("errorMessage", "")
+                if response_json.get("purchased") == False and error_message and error_message != "PriceMismatch":
+                    return False
+                if error_message and error_message != "PriceMismatch":
+                    return False
+                if response_json.get("purchaseResult", "") and "fail" in response_json.get("purchaseResult", "").lower() and error_message != "PriceMismatch":
+                    return False
+            
+            if flow.response.status_code >= 400 and (not response_json or response_json.get("errorMessage") != "PriceMismatch"):
+                return False
+            
             request_json = self.get_request_json(flow)
             if not request_json:
                 return False
@@ -166,6 +181,16 @@ class PurchaseHandler(BaseHandler):
             return True
         
         if "apis.roblox.com/developer-products/v1/developer-products/" in url and "/purchase" in url:
+            response_text = flow.response.get_text()
+            response_json = self.parse_json(response_text) if response_text else None
+            
+            if response_json:
+                if response_json.get("purchased") == False or response_json.get("errorMessage") or (response_json.get("transactionStatus", "") and "fail" in response_json.get("transactionStatus", "").lower()):
+                    return False
+            
+            if flow.response.status_code >= 400:
+                return False
+            
             request_json = self.get_request_json(flow)
             if not request_json:
                 return False
